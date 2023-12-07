@@ -5,6 +5,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const context = canvas.getContext("2d");
     const percent = document.getElementById("percent");
     const score = document.querySelector('.score')
+    const text = document.getElementById('text');
+    const number = document.getElementById('score-number');
     let centerX = canvas.width / 2;
     let centerY = canvas.height / 2;
     let inputArr = [];
@@ -16,6 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let isDrawing = false;
 
     function startDrawing(e) {
+        e.preventDefault();
         restart();
         isDrawing = true;
         draw(e);
@@ -30,10 +33,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function draw(e) {
+        e.preventDefault(); // Предотвращаем скроллинг на сенсорных устройствах
         if (!isDrawing) return;
 
-        const mouseX = e.clientX - canvas.offsetLeft;
-        const mouseY = e.clientY - canvas.offsetTop;
+        // Проверка, является ли событие сенсорным
+        const isTouch = e.type === 'touchmove' || e.type === 'touchstart' || e.type === 'touchend';
+        const mouseX = isTouch ? e.touches[0].clientX - canvas.offsetLeft : e.clientX - canvas.offsetLeft;
+        const mouseY = isTouch ? e.touches[0].clientY - canvas.offsetTop : e.clientY - canvas.offsetTop;
 
         color = calculate(mouseX, mouseY);
 
@@ -56,6 +62,10 @@ document.addEventListener("DOMContentLoaded", function () {
     canvas.addEventListener("mousedown", startDrawing);
     canvas.addEventListener("mouseup", stopDrawing);
     canvas.addEventListener("mousemove", draw);
+
+    canvas.addEventListener("touchstart", startDrawing);
+    canvas.addEventListener("touchend", stopDrawing);
+    canvas.addEventListener("touchmove", draw);
 
 
     function calculate(mouseX, mouseY) {
@@ -93,8 +103,6 @@ document.addEventListener("DOMContentLoaded", function () {
         // context.shadowColor = "transparent";
     }
 
-    const text = document.getElementById('text');
-    const number = document.getElementById('score-number');
     function showBestScore() {
         score.style.display = 'block';
         number.style.color = color;
