@@ -5,17 +5,18 @@ document.addEventListener("DOMContentLoaded", function () {
     const context = canvas.getContext("2d");
     const percent = document.getElementById("percent");
     const score = document.querySelector('.score')
-    const text = document.getElementById('text');
+    const scoreText = document.getElementById('score-text');
     const number = document.getElementById('score-number');
+    const startButton = document.getElementById("startButton");
+    const info = document.querySelector('.info');
     let centerX = canvas.width / 2;
     let centerY = canvas.height / 2;
     let inputArr = [];
     let firstInput = true;
+    let isDrawing = false;
     let radius = 0;
     let bestScore = 0;
     let color;
-
-    let isDrawing = false;
 
     function startDrawing(e) {
         e.preventDefault();
@@ -33,13 +34,15 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function draw(e) {
-        e.preventDefault(); // Предотвращаем скроллинг на сенсорных устройствах
+        e.preventDefault(); 
         if (!isDrawing) return;
 
-        // Проверка, является ли событие сенсорным
+        //check event if it is touch 
         const isTouch = e.type === 'touchmove' || e.type === 'touchstart' || e.type === 'touchend';
         const mouseX = isTouch ? e.touches[0].clientX - canvas.offsetLeft : e.clientX - canvas.offsetLeft;
         const mouseY = isTouch ? e.touches[0].clientY - canvas.offsetTop : e.clientY - canvas.offsetTop;
+
+        //checkRadius(radius);
 
         color = calculate(mouseX, mouseY);
 
@@ -70,6 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function calculate(mouseX, mouseY) {
         if (firstInput) {
+            info.style.display = 'none';
             radius = Math.sqrt(Math.pow(mouseX - centerX, 2) + Math.pow(mouseY - centerY, 2));
             firstInput = false;
         }
@@ -93,6 +97,13 @@ document.addEventListener("DOMContentLoaded", function () {
         return `rgb(${red},${green},0)`;
     }
 
+    startButton.addEventListener("click", function () {
+        startButton.style.display = 'none';
+        document.querySelector('.overlay').style.display = 'none';
+        info.style.display = 'block';
+        canvas.style.pointerEvents = 'auto';
+    });
+
     function restart() {
         context.clearRect(0, 0, canvas.width, canvas.height);
         inputArr = [];
@@ -103,17 +114,24 @@ document.addEventListener("DOMContentLoaded", function () {
         // context.shadowColor = "transparent";
     }
 
+    // const checkRadius = (radius) => {
+    //     if (radius < 50) {
+    //         scoreText.innerHTML = 'Too close to dot';
+    //         isDrawing = false;
+    //     }
+    // }
+
     function showBestScore() {
         score.style.display = 'block';
         number.style.color = color;
 
         if (parseFloat(percent.innerText) > bestScore) {
             bestScore = parseFloat(percent.innerText);
-            text.innerHTML = 'New best score'
+            scoreText.innerHTML = 'New best score'
             number.innerHTML = '';
          }
          else {
-            text.innerHTML = 'Best: '
+            scoreText.innerHTML = 'Best: '
             number.innerHTML = bestScore + '%';
          }
     }
@@ -124,7 +142,5 @@ document.addEventListener("DOMContentLoaded", function () {
 
         centerX = canvas.width / 2;
         centerY = canvas.height / 2;
-    
-        // console.log(`Центр холста: X = ${centerX}, Y = ${centerY}`);
     });
 });

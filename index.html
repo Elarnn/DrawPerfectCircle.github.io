@@ -4,16 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Draw a perfect circle</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bangers&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <canvas id="drawingCanvas"></canvas>
+    <div class="overlay">
+        <span>Can you draw</span>
+        <br>
+        <span>a PERFECT CIRCLE?</span>
+    </div>
+    <button id="startButton"><b>GO</b></button>
     <div class="center-point"></div>
     <div id="percent">0%</div>
+    <div class="info">
+        <span>Start to draw a circle</span>
+        <br>
+        <span>around this</span>
+    </div>
     <div class="score">
-        <span id="text"></span>
-        <span id="score-number"></span>
+        <span id="score-text"></span>
+        <span id="score-number" style="font-family: 'Press Start 2P', cursive; font-size:  20px;"></span>
     </div>
     <script src="script.js"></script>
 </body>

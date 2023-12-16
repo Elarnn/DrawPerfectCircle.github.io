@@ -4,14 +4,36 @@ body {
     justify-content: center;
     height: 100vh;
     margin: 0;
-    overflow: hidden; /* чтобы избежать появления полос прокрутки */
+    overflow: hidden;
     background-color: #101010;
+    color: white;
 }
 canvas {
     border: 1px solid #000;
     width: 100vw;
     height: 100vh;
     display: block;
+    pointer-events: none;
+}
+#startButton {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: none;
+    border-radius: 500%;
+    width: 60px;
+    height: 60px;
+    font-size: 25px;
+    transition: transform 0.5s ease; 
+    z-index: 2;
+}
+.overlay {
+    position: fixed;  
+    font-family: 'Fira Code', monospace;
+    font-size: 40px;
+    top: 30%;
+    z-index: 2;
 }
 .center-point {
     width: 10px;
@@ -19,6 +41,15 @@ canvas {
     background-color: white;
     border-radius: 50%;
     position: absolute;
+    z-index: 1;
+}
+.info {
+    text-align: center;
+    position: fixed;
+    font-family: 'Indie Flower', cursive;
+    font-size: 25px;
+    line-height: 70px;
+    display: none;
 }
 #percent {
     position: absolute;
@@ -27,18 +58,16 @@ canvas {
     transform: translate(-50%, -50%);
     top: 10%;
 	left: 50%;
-    font-family: 'Bangers', cursive;
-    font-size: 50px;
-    color: #fff;
-    pointer-events: none; /* Это делает элемент "прозрачным" для событий мыши */
+    font-family: 'Press Start 2P', cursive;
+    font-size: 40px;
+    pointer-events: none; /* it makes element transparent for mouse event */
 }
 .score {
-    color: white;
     position: absolute;
     transform: translate(-50%, -50%);
     top: 55%;
 	left: 50%;
-    font-family: cursive;
+    font-family: 'Indie Flower', cursive, sans-serif;
     font-size: 25px;
     pointer-events: none;
 }
