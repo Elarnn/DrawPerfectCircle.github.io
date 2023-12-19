@@ -50,6 +50,7 @@ canvas {
     font-size: 25px;
     line-height: 70px;
     display: none;
+    pointer-events: none;
 }
 #percent {
     position: absolute;
@@ -60,6 +61,7 @@ canvas {
 	left: 50%;
     font-family: 'Press Start 2P', cursive;
     font-size: 40px;
+    display: none;
     pointer-events: none; /* it makes element transparent for mouse event */
 }
 .score {

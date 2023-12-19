@@ -17,12 +17,14 @@ document.addEventListener("DOMContentLoaded", function () {
     let radius = 0;
     let bestScore = 0;
     let color;
+    let timer;
 
     function startDrawing(e) {
         e.preventDefault();
         restart();
         isDrawing = true;
         draw(e);
+        startTimer();
     }
 
     function stopDrawing() {
@@ -31,7 +33,9 @@ document.addEventListener("DOMContentLoaded", function () {
         context.beginPath();
 
         showBestScore();
+        clearTimeout(timer)
     }
+    
 
     function draw(e) {
         e.preventDefault(); 
@@ -42,9 +46,9 @@ document.addEventListener("DOMContentLoaded", function () {
         const mouseX = isTouch ? e.touches[0].clientX - canvas.offsetLeft : e.clientX - canvas.offsetLeft;
         const mouseY = isTouch ? e.touches[0].clientY - canvas.offsetTop : e.clientY - canvas.offsetTop;
 
-        //checkRadius(radius);
 
         color = calculate(mouseX, mouseY);
+        //checkRadius(radius, mouseX, mouseY);
 
         percent.style.color = color;
 
@@ -62,23 +66,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-    canvas.addEventListener("mousedown", startDrawing);
-    canvas.addEventListener("mouseup", stopDrawing);
+    canvas.addEventListener("mousedown", startDrawing); 
     canvas.addEventListener("mousemove", draw);
 
     canvas.addEventListener("touchstart", startDrawing);
-    canvas.addEventListener("touchend", stopDrawing);
     canvas.addEventListener("touchmove", draw);
 
 
     function calculate(mouseX, mouseY) {
+        const input = Math.sqrt(Math.pow(mouseX - centerX, 2) + Math.pow(mouseY - centerY, 2));
+
         if (firstInput) {
             info.style.display = 'none';
-            radius = Math.sqrt(Math.pow(mouseX - centerX, 2) + Math.pow(mouseY - centerY, 2));
+            percent.style.display = 'block'
+            radius = input;
             firstInput = false;
         }
-
-        const input = Math.sqrt(Math.pow(mouseX - centerX, 2) + Math.pow(mouseY - centerY, 2));
 
         const deviation = (Math.pow(input - radius, 2));
         inputArr.push(deviation);
@@ -106,6 +109,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function restart() {
         context.clearRect(0, 0, canvas.width, canvas.height);
+        canvas.addEventListener("mouseup", stopDrawing);
+        canvas.addEventListener("touchend", stopDrawing);
         inputArr = [];
         firstInput = true;
         sum = 0;
@@ -114,12 +119,30 @@ document.addEventListener("DOMContentLoaded", function () {
         // context.shadowColor = "transparent";
     }
 
-    // const checkRadius = (radius) => {
+    // const checkRadius = (radius, mouseX, mouseY) => {
     //     if (radius < 50) {
+    //         canvas.removeEventListener('mouseup', stopDrawing);
+    //         canvas.removeEventListener("touchend", stopDrawing);
+    //         scoreText.style.display = 'block';
     //         scoreText.innerHTML = 'Too close to dot';
     //         isDrawing = false;
     //     }
     // }
+
+    const startTimer = () => {
+        timer = setTimeout(() => {
+            isDrawing = false;
+            context.stroke();
+            context.beginPath();
+            percent.innerText = 'XX.X%';
+            percent.style.color = '#ff0000'
+            score.style.display = 'block';
+            scoreText.innerHTML = 'Too slow';
+            canvas.removeEventListener('mouseup', stopDrawing);
+            canvas.removeEventListener("touchend", stopDrawing);
+        }, 8000);
+        
+    }
 
     function showBestScore() {
         score.style.display = 'block';
